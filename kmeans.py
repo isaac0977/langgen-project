@@ -30,15 +30,3 @@ for file_name in os.listdir('amazon_data'):
 	df['cluster'] = df_cluster
 	df.to_csv(file_name)
 
-#tools_df = pd.read_csv('amazon_data/meta_AMAZON_FASHION.csv',names= ['description', 'title', 'feature', 'rank', 'price'])
-
-#sentences, embeddings = create_sentence_embeddings("title", tools_df)
-
-
-#for sentence_id, cluster_id in enumerate(cluster_assignment):
-#    clustered_sentences[cluster_id].append(sentences[sentence_id])
-
-#for i, cluster in enumerate(clustered_sentences):
-#    print("Cluster ", i+1)
-#    print(cluster)
-#    print("")
