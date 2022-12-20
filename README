@@ -1,0 +1,77 @@
+Outline
+
+
+1. Data Processing
+
+	Downloaded data from - https://jmcauley.ucsd.edu/data/amazon_v2/index.html
+
+	I have used :
+
+	All Beauty
+	Appliances	
+	Arts Crafts and Sewing
+	Automotive	
+	Electronics
+	Industrial and Scientific
+	Musical Instruments
+	Office Products
+	Patio Lawn and Garden
+	Pet Supplies
+	Sports and Outdoors	
+	Tools and Home Improvement
+
+
+	Data cleaning:
+		Execution: 
+			python data-preprocess.py
+
+		What it does:
+			Remove HTML like text
+			Drop rows with empty columns
+			Text normalization, removing special characters
+			Removing rows with duplicate or near-similar titles
+
+	Data processing, train-test-split
+		Execution:
+			python kmeans.py
+
+		What it does:
+			Kmeans to identify rows that describe similar types of products
+
+
+		Execution:
+			python data-rank.py
+
+		What it does:
+			Identifies the popular vs non popular items within clusters
+			Identifies characteristic words from the two groups
+
+2. Data Training
+
+Main model
+	Execution path:
+		python train.py
+	
+	What it does:
+		Converts the dataset into the correct input format 
+		Fine tunes GPT2 model
+
+Roberta for discriminative decoding
+	Execution path:
+		python roberta.py
+
+	What it does:
+		Trains a discriminative roberta model
+
+3. Generation and Experiments + 4. Evaluation
+
+	Execution path:
+		python generate.py
+
+	Vanilla generation
+	Discriminative (Roberta)
+	Sentiment anlysis (awessome framework)
+
+	Computes Rouge and faithfulness scores
+
+
