@@ -97,6 +97,8 @@ def generate(model, tokenizer, input, expensive=True, discriminative=False, dire
 
                 probability_distribution = None
 
+                #If the direction flag is set, then instead of getting the first p words based on the cumulative sum,
+                #We just take the first 10 words. This is because the scoring process takes too long.
                 if (direction):
                   sorted_logits, sorted_indices = torch.sort(logits, descending=True)
                   cumulative_probs = torch.cumsum(F.softmax(sorted_logits, dim=-1), dim=-1)
@@ -126,6 +128,9 @@ def generate(model, tokenizer, input, expensive=True, discriminative=False, dire
 
                 
 
+                #The temp_generated sentence is current sentence + next potential word
+                #The scorer calculates the score for (current sentence + next potential word)
+                #And then adjusts the probability of the 'next potential word'
                 if (direction):
                   if (i > 10):
                     for k, x  in enumerate(probability_distribution):
@@ -158,6 +163,7 @@ def generate(model, tokenizer, input, expensive=True, discriminative=False, dire
                     output_text = output_text[len(input):]
                     current_score = 0
                     
+                    #If the discriminative flag is added, then add the roberta score to the total probability
                     if (discriminative):
                       roberta_score = F.softmax(torch.Tensor(roberta.predict([output_text])[1]), dim=-1)[0][1].item()
                       if not expensive:
@@ -275,7 +281,7 @@ for i in range(len(test_expensive_desirable)):
         rougel4 += rouges[2]
         faith4 += faithfulness(sentence, test_expensive_desirable, i)
 
-for i in range(5):
+for i in range(len(test_expensive_desirable)):
         sentence = generate(model, tokenizer, test_cheap_desirable[i], repetition=5, max_length=300, discriminative=False, direction=False)
         rouges = compute_rouge(sentence, test_cheap_desirable, i)
         rouge15 += rouges[0]
@@ -293,30 +299,30 @@ for i in range(5):
 
 print('---------------------RESULTS---------------------')
 print("case 1")
-print(rouge11/5)
-print(rouge21/5)
-print(rougel1/5)
-print(faith1/5)
+print(rouge11/len(test_expensive_desirable))
+print(rouge21/len(test_expensive_desirable))
+print(rougel1/len(test_expensive_desirable))
+print(faith1/len(test_expensive_desirable))
 print()
 print("case 2")
-print(rouge12/5)
-print(rouge22/5)
-print(rougel2/5)
-print(faith2/5)
+print(rouge12/len(test_expensive_desirable))
+print(rouge22/len(test_expensive_desirable))
+print(rougel2/len(test_expensive_desirable))
+print(faith2/len(test_expensive_desirable))
 print()
-#print("case 3")
-#print(rouge13/len(test_expensive_desirable))
-#print(rouge23/len(test_expensive_desirable))
-#print(rougel3/len(test_expensive_desirable))
-#print(faith3/len(test_expensive_desirable))
-#print()
-#print("case 4")
-#print(rouge14/len(test_expensive_desirable))
-#print(rouge24/len(test_expensive_desirable))
-#print(rougel4/len(test_expensive_desirable))
-#print(faith4/len(test_expensive_desirable))
-#print()
-#print("case 5")
+print("case 3")
+print(rouge13/len(test_expensive_desirable))
+print(rouge23/len(test_expensive_desirable))
+print(rougel3/len(test_expensive_desirable))
+print(faith3/len(test_expensive_desirable))
+print()
+print("case 4")
+print(rouge14/len(test_expensive_desirable))
+print(rouge24/len(test_expensive_desirable))
+print(rougel4/len(test_expensive_desirable))
+print(faith4/len(test_expensive_desirable))
+print()
+print("case 5")
 print(rouge15/len(test_expensive_desirable))
 print(rouge25/len(test_expensive_desirable))
 print(rougel5/len(test_expensive_desirable))
