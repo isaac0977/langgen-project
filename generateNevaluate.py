@@ -10,7 +10,6 @@ undesirable = pd.read_csv('../cheap.csv')
 model = pickle.load(open('../langgen_model.pkl', 'rb'))
 roberta = pickle.load(open('../roberta.pkl', 'rb'))
 
-sample = 2402
 avg_builder = SentimentIntensityScorerBuilder('avg', 'bert-base-nli-mean-tokens', 'euclidean', '100', True)
 labmt_avg_scorer = avg_builder.build_scorer_from_prebuilt_lexicon('labmt')
 
